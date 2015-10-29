@@ -1,0 +1,9 @@
+idm:
+    container_name: keyrockauth_idm_1
+    image: ging/fiware-idm
+    volumes:
+        - ./config/settings.py:/opt/idm/conf/settings.py
+        - ./config/local_settings.py:/opt/idm/openstack_dashboard/local/local_settings.py
+    ports:
+        - "5000:5000"
+        - "8000:8000"
