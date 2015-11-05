@@ -3,25 +3,24 @@
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE=$DIR/../.env
 
-[ -f $ENV_FILE ] && source $ENV_FILE
-
-# TODO(mauvm): Remove old token from $ENV_FILE
+if [ -f $ENV_FILE ]; then
+	source $ENV_FILE
+fi
 
 curl -i -s \
-  -H "Content-Type: application/json" \
-  -d '
+	-H "Content-Type: application/json" \
+	-d '
 { "auth": {
     "identity": {
       "methods": ["password"],
       "password": {
         "user": {
-          "name": "idm",
+          "name": "'"${1:-idm}"'",
           "domain": { "id": "default" },
-          "password": "'${1:-idm}'"
+          "password": "'"${2:-idm}"'"
         }
       }
     }
   }
 }' \
-	http://$KEYROCK_HOST:5000/v3/auth/tokens | tee /dev/tty \
-	| grep 'X-Subject-Token' | awk '{ print "KEYROCK_IDM_TOKEN="$2 }' | tr -d '\r' >> $ENV_FILE
+	http://$KEYROCK_IP:5000/v3/auth/tokens | grep 'X-Subject-Token' | awk '{ print $2 }' | tr -d '\r'

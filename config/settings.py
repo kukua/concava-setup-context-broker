@@ -105,6 +105,6 @@ FIWARE_DEFAULT_APPS = {
 
 # --- ADDED AUTOMATICALLY --- 
 INTERNAL_ROLES_IDS = {
-	'provider': '8f9e6c232ae74003833528fc7400756f',
-	'purchaser': '25f9163a882243ff8e2741c32df238c4'
+	'provider': '738c2b8d7bc044dbbbc605b2c57f1c45',
+	'purchaser': '9565e124432343ca829145b8617dccc1'
 }

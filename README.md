@@ -8,18 +8,19 @@
 docker-compose up -d
 docker exec -it keyrockauth_idm_1 /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.database_create'
 docker-compose restart
-sleep 2
+sleep 2 # seconds
 docker exec -it keyrockauth_idm_1 /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.populate'
-echo "KEYROCK_IP=<container ip>" > .env # On OS X the IP address can be found in $DOCKER_HOST
-echo "KEYROCK_IDM_PASSWORD=<new password>" >> .env
-./tools/get_token.sh # Appends KEYROCK_IDM_TOKEN to .env
+
+cp .env.sample .env
+# > Manually configure the .env file
+
+./tools/add_admin_token.sh # Adds KEYROCK_ADMIN_TOKEN to .env
+./tools/change_password.sh # Changes password to $KEYROCK_ADMIN_PASSWORD
+./tools/create_project.sh  # Adds KEYROCK_PROJECT_ID to .env
+./tools/create_user.sh '<email>' '<username>' '<password>'
 ```
 
 Next open `http://<container ip>:8000/` and login with username `idm` and password `idm`.
-
-## Checklist
-
-- [ ] Test on Windows and write scripts for it?
 
 ## Notes
 
