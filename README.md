@@ -6,11 +6,12 @@
 
 ```bash
 docker-compose up -d
-docker exec -it keyrockauth_idm_1 /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.database_create'
-docker-compose restart
+docker exec -it keyrockauth_idm /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.database_create'
+docker-compose restart idm
 sleep 2 # seconds
-docker exec -it keyrockauth_idm_1 /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.populate'
+docker exec -it keyrockauth_idm /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.populate'
 
+# Configure KeyRock IDM
 cp .env.sample .env
 # > Manually configure the .env file
 
@@ -18,6 +19,11 @@ cp .env.sample .env
 ./tools/change_password.sh # Changes password to $KEYROCK_ADMIN_PASSWORD
 ./tools/create_project.sh  # Adds KEYROCK_PROJECT_ID to .env
 ./tools/create_user.sh '<email>' '<username>' '<password>'
+
+# Configure PEP
+# > Edit config/pep.js
+docker-compose restart pep
+docker-compose logs pep # Verify if running
 ```
 
 Next open `http://<container ip>:8000/` and login with username `idm` and password `idm`.

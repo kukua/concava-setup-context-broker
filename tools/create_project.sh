@@ -6,6 +6,7 @@ ENV_FILE=$DIR/../.env
 [ -f $ENV_FILE ] && source $ENV_FILE
 
 ID=$(curl \
+	-i -s
 	-H "X-Auth-Token: $KEYROCK_ADMIN_TOKEN" \
 	-H "Content-Type: application/json" \
 	-d '
