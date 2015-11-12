@@ -21,9 +21,12 @@ cp .env.sample .env
 ./tools/create_user.sh '<email>' '<username>' '<password>'
 
 # Configure PEP
-# > Edit config/pep.js
+cp config/setting.py.example config/setting.py
+# > Edit config/pep.js (at least account_host, username, and password)
+# > Edit config/settings.py (should work out of the box)
 docker-compose restart pep
-docker-compose logs pep # Verify if running
+docker-compose logs pep # Verify if running and authenticated
+# "INFO: Server - Success authenticating PEP proxy. Proxy Auth-token: ..."
 ```
 
 Next open `http://<container ip>:8000/` and login with username `idm` and password `idm`.

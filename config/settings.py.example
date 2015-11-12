@@ -101,10 +101,3 @@ FIWARE_DEFAULT_APPS = {
     'Mashup': [],
     'Store':[],
 }
-
-
-# --- ADDED AUTOMATICALLY --- 
-INTERNAL_ROLES_IDS = {
-	'provider': '1528c560e6214e10aedb3c081d067f0e',
-	'purchaser': '703d63d89a4c4b50a93881954b9f55a0'
-}
