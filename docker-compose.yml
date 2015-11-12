@@ -18,4 +18,4 @@ pep:
     links:
         - idm
     external_links:
-        - concava_context_broker_1:context_broker
+        - concava_context_broker:context_broker
