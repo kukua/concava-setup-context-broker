@@ -1,15 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 
+# Get configuration
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE=$DIR/../.env
+[ -f $ENV_FILE ] && . $ENV_FILE
 
-[ -f $ENV_FILE ] && source $ENV_FILE
-
-if [[ $KEYROCK_PROJECT_ID == '' ]]; then
+# Check project ID
+if [ "$KEYROCK_PROJECT_ID" = '' ]; then
 	echo "KEYROCK_PROJECT_ID missing from env file. Run ./tools/create_project.sh first."
 	exit 1;
 fi
 
+# Create user
 curl \
 	-H "X-Auth-Token: $KEYROCK_ADMIN_TOKEN" \
 	-H "Content-Type: application/json" \
@@ -23,4 +25,4 @@ curl \
         "enabled": true
     }
 }' \
-	http://$KEYROCK_IP:5000/v3/users
+	"http://$KEYROCK_HOST/v3/users"

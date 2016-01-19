@@ -10,7 +10,7 @@ config.https = undefined; /*{
     port: 443
 };*/
 
-config.account_host = 'http://concava';
+config.account_host = 'http://localhost';
 
 config.keystone_host = 'idm';
 config.keystone_port = 5000;

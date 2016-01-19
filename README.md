@@ -17,25 +17,20 @@ cp .env.sample .env
 docker-compose up -d
 
 # Configure KeyRock IDM
-docker exec -it keyrockauth_idm /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.database_create'
+docker exec -it concavacontextbroker_idm /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.database_create'
 docker-compose restart idm
 sleep 2 # seconds
-docker exec -it keyrockauth_idm /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.populate'
+docker exec -it concavacontextbroker_idm /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.populate'
 
-cp .env.sample .env
-# > Manually configure the .env file
-
-./tools/add_admin_token.sh # Adds KEYROCK_ADMIN_TOKEN to .env
-./tools/change_password.sh # Changes password to $KEYROCK_ADMIN_PASSWORD
-./tools/create_project.sh  # Adds KEYROCK_PROJECT_ID to .env
+./tools/add_admin_token.sh    # Adds KEYROCK_ADMIN_TOKEN to .env
+./tools/change_password.sh    # Changes password to $KEYROCK_ADMIN_PASSWORD
+./tools/create_project.sh     # Adds KEYROCK_PROJECT_ID to .env
 ./tools/create_user.sh '<email>' '<username>' '<password>'
 
 # Configure PEP proxy
-cp config/setting.py.example config/setting.py
-# > Edit config/pep.js (at least account_host, username, and password)
-# > Edit config/settings.py (should work out of the box)
+# > Edit config/pep.js (set same account_host, username, and password as in .env)
 docker-compose restart pep
-docker-compose logs pep # Verify if running and authenticated
+docker-compose logs pep       # Verify if running and authenticated
 # "INFO: Server - Success authenticating PEP proxy. Proxy Auth-token: ..."
 
 # Prepare Context Broker
@@ -43,6 +38,8 @@ docker-compose logs pep # Verify if running and authenticated
 ```
 
 Now you will be able to open `http://<container ip>:8000/` and login with username `idm` and password `idm`.
+
+Note: do not use in production without closing ports in `docker-compose.yml`.
 
 ## Test
 
@@ -56,6 +53,13 @@ echo '00000539' | xxd -r -p | \
 docker-compose logs concava
 ./tools/show_sensor_data.sh
 ```
+
+## Todo
+
+- [ ] Put KeyRock IDM user info in `.env`
+- [ ] Read KeyRock IDM user info from `.env` in `./tools/create_user.sh`
+- [ ] Automate setup process
+- [ ] Create script that syncs `.env` with config files. So that editing `config/pep.js` and `config/settings.py` is no longer necessary
 
 ## Notes
 

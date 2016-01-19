@@ -39,8 +39,7 @@ var query = (req, config, url, body, cb) => {
 
 // Authentication
 export let auth = (req, config, data, cb) => {
-	// Pass, since the PEP proxy will do the authentication for us
-	cb()
+	cb('ContextBroker authentication will be done by the PEP proxy.')
 }
 
 // Authentication

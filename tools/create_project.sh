@@ -1,12 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
+# Get configuration
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE=$DIR/../.env
+[ -f $ENV_FILE ] && . $ENV_FILE
 
-[ -f $ENV_FILE ] && source $ENV_FILE
-
-echo $KEYROCK_ADMIN_TOKEN
-
+# Create project
 ID=$(curl \
 	-i -s \
 	-H "X-Auth-Token: $KEYROCK_ADMIN_TOKEN" \
@@ -18,9 +17,7 @@ ID=$(curl \
 		"description": "'"$KEYROCK_PROJECT_DESC"'"
 	}
 }' \
-	http://$KEYROCK_IP:5000/v3/projects | tee /dev/tty \
+	"http://$KEYROCK_HOST/v3/projects" | tee /dev/tty \
 	| sed '/"id":/!d;s/^.*"id": "//;s/",.*$//')
 
-if [[ $ID != '' ]]; then
-	echo "KEYROCK_PROJECT_ID=$ID" >> $ENV_FILE
-fi
+[ "$ID" != '' ] && echo "KEYROCK_PROJECT_ID=$ID" >> $ENV_FILE

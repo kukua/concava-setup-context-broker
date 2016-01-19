@@ -1,12 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
+# Get configuration
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE=$DIR/../.env
+[ -f $ENV_FILE ] && . $ENV_FILE
 
-if [ -f $ENV_FILE ]; then
-	source $ENV_FILE
-fi
-
+# Get password
 PASSWORD=$($DIR/get_token.sh idm ${1:-idm})
 
 if [[ $PASSWORD != '' ]]; then

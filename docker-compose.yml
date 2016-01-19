@@ -1,25 +1,35 @@
 context_broker:
-    container_name: concava_context_broker
     image: jonadev95/contextbroker-docker
+    container_name: concavacontextbroker_cb
     ports:
-        - "1026:1026"
+        - "3001:1026"
 idm:
-    container_name: keyrockauth_idm
     image: ging/fiware-idm
+    container_name: concavacontextbroker_idm
     ports:
-        - "5000:5000"
-        - "8000:8000"
+        - "3002:5000"
+        - "3003:8000"
     volumes:
         - ./config/settings.py:/opt/idm/conf/settings.py
         - ./config/local_settings.py:/opt/idm/openstack_dashboard/local/local_settings.py
 pep:
-    container_name: keyrockauth_pep
     image: ging/fiware-pep-proxy
+    container_name: concavacontextbroker_pep
     ports:
-        - "9001:80"
+        - "3004:80"
     volumes:
         - ./config/pep.js:/opt/fiware-pep-proxy/config.js:ro
         - ./src/idm.fixed.js:/opt/fiware-pep-proxy/lib/idm.js:ro
     links:
         - context_broker
         - idm
+concava:
+    build: .
+    container_name: concavacontextbroker_concava
+    env_file: .env
+    ports:
+        - "3000:3000"
+    volumes:
+        - ./config/concava.js:/data/config.js:ro
+    links:
+        - pep
