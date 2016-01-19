@@ -1,4 +1,3 @@
-
 var config = require('../config.js'),
     proxy = require('./HTTPClient.js');
 
@@ -22,15 +21,19 @@ var IDM = (function() {
         var body = {
             auth: {
                 identity: {
-                    methods: ['password'], 
+                    methods: ['password'],
                     password: {
                         user: {
-                            name: config.username, 
-                            password: config.password, 
+                            name: config.username,
+                            password: config.password,
                             domain: {id: "default"}
                         }
                     }
-                }
+                },
+// Fix
+//                scope: {
+//                    domain: {id: "default"}
+//                }
             }
         };
         proxy.sendData('http', options, JSON.stringify(body), undefined, function (status, resp, headers) {
@@ -65,7 +68,7 @@ var IDM = (function() {
                 headers: {'X-Auth-Token': my_token, 'Accept': 'application/json'}
             };
         }
-        
+
         if (tokens_cache[token]) {
             log.info('Token in cache, checking timestamp...');
             var current_time = (new Date()).getTime();
@@ -80,7 +83,7 @@ var IDM = (function() {
                 delete tokens_cache[token];
             }
         }
-        
+
         log.info('Checking token with IDM...');
 
         proxy.sendData('http', options, undefined, undefined, function (status, resp) {
@@ -92,7 +95,7 @@ var IDM = (function() {
         }, function (status, e) {
             if (status === 401) {
 
-                log.error('Error validating token. Proxy not authorized in keystone. Keystone authentication ...');   
+                log.error('Error validating token. Proxy not authorized in keystone. Keystone authentication ...');
                 authenticate (function (status, resp) {
 
                     my_token = JSON.parse(resp).access.token.id;

@@ -1,3 +1,8 @@
+context_broker:
+    container_name: concava_context_broker
+    image: jonadev95/contextbroker-docker
+    ports:
+        - "1026:1026"
 idm:
     container_name: keyrockauth_idm
     image: ging/fiware-idm
@@ -14,8 +19,7 @@ pep:
         - "9001:80"
     volumes:
         - ./config/pep.js:/opt/fiware-pep-proxy/config.js:ro
-        - ./lib/idm.fixed.js:/opt/fiware-pep-proxy/lib/idm.js:ro
+        - ./src/idm.fixed.js:/opt/fiware-pep-proxy/lib/idm.js:ro
     links:
+        - context_broker
         - idm
-    external_links:
-        - concava_context_broker:context_broker
