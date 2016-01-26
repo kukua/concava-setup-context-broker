@@ -43,13 +43,15 @@ export let auth = (req, config, data, cb) => {
 }
 
 // Authentication
+var cache = {}
+
 export let metadata = (req, config, data, { SensorData, SensorAttribute }, cb) => {
 	if ( ! (data instanceof SensorData)) return cb('Invalid SensorData given.')
 
 	var id = data.getDeviceId()
 
 	// Check cache
-	var cached = this._cache[id]
+	var cached = cache[id]
 
 	if (cached && cached.timestamp > Date.now() - config.cacheExpireTime) {
 		data.setAttributes(cached.attributes)
@@ -112,7 +114,7 @@ export let metadata = (req, config, data, { SensorData, SensorAttribute }, cb) =
 			})
 
 			// Cache result
-			this._cache[id] = {attributes, timestamp: Date.now()}
+			cache[id] = {attributes, timestamp: Date.now()}
 
 			// Callback
 			data.setAttributes(attributes)
@@ -124,7 +126,7 @@ export let metadata = (req, config, data, { SensorData, SensorAttribute }, cb) =
 }
 
 // Storage
-export let storage = (req, config, data, cb) => {
+export let storage = (req, config, data, { SensorData }, cb) => {
 	if ( ! (data instanceof SensorData)) return cb('Invalid SensorData given.')
 
 	var values = data.getData()
@@ -145,7 +147,7 @@ export let storage = (req, config, data, cb) => {
 	attributes.push({ name: 'timestamp', value: '' + timestamp })
 
 	// Insert sensor data
-	request(req, config, 'updateContext', {
+	query(req, config, 'updateContext', {
 		contextElements: [
 			{
 				type: 'SensorData',

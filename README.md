@@ -14,40 +14,25 @@ git clone https://github.com/kukua/concava-setup-mysql-influxdb
 cd concava-setup-mysql-influxdb
 cp .env.sample .env
 # > Edit configuration in .env
-docker-compose up -d
+# > Edit config/pep.js (set same account_host and admin password as in .env)
 
-# Configure KeyRock IDM
-docker exec -it concavacontextbroker_idm /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.database_create'
-docker-compose restart idm
-sleep 2 # seconds
-docker exec -it concavacontextbroker_idm /bin/sh -c 'source /usr/local/bin/virtualenvwrapper.sh && workon idm_tools && fab keystone.populate'
-
-./tools/add_admin_token.sh    # Adds KEYROCK_ADMIN_TOKEN to .env
-./tools/change_password.sh    # Changes password to $KEYROCK_ADMIN_PASSWORD
-./tools/create_project.sh     # Adds KEYROCK_PROJECT_ID to .env
-./tools/create_user.sh '<email>' '<username>' '<password>'
-
-# Configure PEP proxy
-# > Edit config/pep.js (set same account_host, username, and password as in .env)
-docker-compose restart pep
-docker-compose logs pep       # Verify if running and authenticated
-# "INFO: Server - Success authenticating PEP proxy. Proxy Auth-token: ..."
-
-# Prepare Context Broker
+./tools/setup.sh
 ./tools/append_sensor_metadata.sh
 ```
 
-Now you will be able to open `http://<container ip>:8000/` and login with username `idm` and password `idm`.
+Now you will be able to open `http://<container IP>:3003/` and login with username `idm` and admin password from `.env`.
 
-Note: do not use in production without closing ports in `docker-compose.yml`.
+__Note:__ do not use in production without closing ports in `docker-compose.yml`.
 
 ## Test
 
 ```bash
 # 1337 (base 10) = 00000539 (base 16)
+source .env
+./tools/get_token.sh "$KEYROCK_USER_NAME" "$KEYROCK_USER_PASS"
 echo '00000539' | xxd -r -p | \
 	curl -i -XPUT 'http://<container IP>:3000/v1/sensorData/0000000000000001' \
-	-H 'Authorization: Token abcdef0123456789abcdef0123456789' \
+	-H 'Authorization: Token <token from get_token.sh output>' \
 	-H 'Content-Type: application/octet-stream' --data-binary @-
 
 docker-compose logs concava
@@ -56,9 +41,9 @@ docker-compose logs concava
 
 ## Todo
 
-- [ ] Put KeyRock IDM user info in `.env`
-- [ ] Read KeyRock IDM user info from `.env` in `./tools/create_user.sh`
-- [ ] Automate setup process
+- [x] Automate setup process
+- [x] Put KeyRock IDM user info in `.env`
+- [x] Read KeyRock IDM user info from `.env` in `./tools/create_user.sh`
 - [ ] Create script that syncs `.env` with config files. So that editing `config/pep.js` and `config/settings.py` is no longer necessary
 
 ## Notes

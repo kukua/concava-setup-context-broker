@@ -20,4 +20,6 @@ ID=$(curl \
 	"http://$KEYROCK_HOST/v3/projects" | tee /dev/tty \
 	| sed '/"id":/!d;s/^.*"id": "//;s/",.*$//')
 
-[ "$ID" != '' ] && echo "KEYROCK_PROJECT_ID=$ID" >> $ENV_FILE
+[ "$ID" = '' ] && echo 'Error determining project ID!' && exit 1
+
+echo "KEYROCK_PROJECT_ID=$ID" >> $ENV_FILE

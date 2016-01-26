@@ -22,7 +22,7 @@ config.app_ssl = false;
 
 // Credentials obtained when registering PEP Proxy in Account Portal
 config.username = 'idm';
-config.password = 'mypassword';
+config.password = 'verysecurepassword';
 
 // in seconds
 config.chache_time = 300;
