@@ -45,6 +45,7 @@ docker-compose logs concava
 - [x] Put KeyRock IDM user info in `.env`
 - [x] Read KeyRock IDM user info from `.env` in `./tools/create_user.sh`
 - [ ] Create script that syncs `.env` with config files. So that editing `config/pep.js` and `config/settings.py` is no longer necessary
+- [ ] Fix PEP authentication check in `tools/setup.py` (it sometimes outputs 'Proxy Auth-token:  undefined')
 
 ## Notes
 

@@ -31,7 +31,6 @@ echo
 echo
 
 # Configure PEP proxy
-# > Edit config/pep.js (set same account_host, username, and password as in .env)
 dc restart pep
 sleep 2 # sec
 (docker logs concavacontextbroker_pep | grep -iq 'INFO: Server - Success authenticating PEP proxy.') \
