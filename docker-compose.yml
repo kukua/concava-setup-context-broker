@@ -3,7 +3,7 @@ context_broker:
     container_name: concavacontextbroker_cb
     ports:
         - "3001:1026"
-    restart: on-failure:99
+    restart: always
 idm:
     image: ging/fiware-idm
     container_name: concavacontextbroker_idm
@@ -13,7 +13,7 @@ idm:
     volumes:
         - ./config/settings.py:/opt/idm/conf/settings.py
         - ./config/local_settings.py:/opt/idm/openstack_dashboard/local/local_settings.py
-    restart: on-failure:99
+    restart: always
 pep:
     image: ging/fiware-pep-proxy
     container_name: concavacontextbroker_pep
@@ -25,7 +25,7 @@ pep:
     links:
         - context_broker
         - idm
-    restart: on-failure:99
+    restart: always
 concava:
     build: .
     container_name: concavacontextbroker_concava
@@ -36,4 +36,4 @@ concava:
         - ./config/concava.js:/data/config.js:ro
     links:
         - pep
-    restart: on-failure:99
+    restart: always
