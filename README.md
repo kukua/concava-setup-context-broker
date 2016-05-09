@@ -13,6 +13,7 @@
 git clone https://github.com/kukua/concava-setup-mysql-influxdb
 cd concava-setup-mysql-influxdb
 cp .env.sample .env
+chmod 600 .env
 # > Edit configuration in .env
 # > Edit config/pep.js (set same account_host and admin password as in .env)
 
