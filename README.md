@@ -53,3 +53,9 @@ docker-compose logs concava
 - http://fiware-idm.readthedocs.org/en/latest/admin_guide.html
 - http://docs.openstack.org/developer/keystone/api_curl_examples.html#projects
 - http://developer.openstack.org/api-ref-identity-v3.html
+
+## License
+
+This software is licensed under the [MIT license](https://github.com/kukua/concava-setup-context-broker/blob/master/LICENSE).
+
+© 2016 Kukua BV
