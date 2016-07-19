@@ -1,8 +1,10 @@
-# ConCaVa with Orion Context Broker, KeyRock IDM and PEP proxy
+# ConCaVa with Orion Context Broker, KeyRock IDM, and PEP proxy
 
-> This setup uses the KeyRock IDM + PEP proxy for authentication and the Context Broker for sensor (meta)data storage.
+> ConCaVa for data processing, KeyRock IDM + PEP proxy for authentication, and the Context Broker for sensor (meta)data storage.
 
-## Requirements
+The documentation for ConCaVa can be [found here](http://kukua.github.io/concava/latest/).
+
+## Prerequisites
 
 - [Docker](https://docs.docker.com/engine/installation/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
@@ -40,13 +42,14 @@ docker-compose logs concava
 ./tools/show_sensor_data.sh
 ```
 
+<!--
 ## Todo
-
 - [x] Automate setup process
 - [x] Put KeyRock IDM user info in `.env`
 - [x] Read KeyRock IDM user info from `.env` in `./tools/create_user.sh`
 - [ ] Create script that syncs `.env` with config files. So that editing `config/pep.js` and `config/settings.py` is no longer necessary
 - [ ] Fix PEP authentication check in `tools/setup.py` (it sometimes outputs 'Proxy Auth-token:  undefined')
+-->
 
 ## Notes
 
